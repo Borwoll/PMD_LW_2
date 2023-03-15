@@ -12,13 +12,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val myListData: Array<ListData> = arrayOf<ListData>(
-            ListData("Первые блюда", R.mipmap.catalog_1_foreground),
-            ListData("Вторые блюда", R.mipmap.catalog_2_foreground),
-            ListData("Салаты", R.mipmap.catalog_6_foreground),
-            ListData("Закуски", R.mipmap.catalog_3_foreground),
-            ListData("Десерты", R.mipmap.catalog_5_foreground),
-            ListData("Выпечка", R.mipmap.catalog_4_foreground),
-            ListData("Напитки", R.mipmap.catalog_9_foreground)
+            ListData("first", getString(R.string.first_category), R.mipmap.catalog_1_foreground),
+            ListData("second",getString(R.string.second_category), R.mipmap.catalog_2_foreground),
+            ListData("salad", getString(R.string.third_category), R.mipmap.catalog_6_foreground),
+            ListData("drinks", getString(R.string.four_category), R.mipmap.catalog_9_foreground)
         )
         val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
         val adapter = ListAdapter(myListData)

@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">PMD_LW_2</string>
+    <string name="app_name">Кулинарная книга</string>
+    <string name="icon_content_description">Icon</string>
+    <string name="first_category">Первые блюда</string>
+    <string name="second_category">Вторые блюда</string>
+    <string name="third_category">Салаты</string>
+    <string name="four_category">Напитки</string>
+    <string name="first_bean_soup">Постный суп с фасолью — рецепт вкусного супчика в мультиварке</string>
+    <string name="first_pumpkin_soup">Суп с фасолью и тыквой</string>
+    <string name="first_tomato_soup">Красный томатный суп с фасолью: множество вариантов исполнения</string>
+    <string name="first_cabbage_soup">Крем-суп из краснокочанной капусты</string>
+    <string name="second_potato_boats">Картофельные лодочки с рулетиками</string>
+    <string name="second_meatballs">Тефтели с картофелем в духовке</string>
+    <string name="second_vegetables">Запеченные овощи в маринаде</string>
+    <string name="second_porridge">Перловая каша с сухофруктами</string>
+    <string name="third_avocado">Салат с авокадо</string>
+    <string name="thid_winter">Постный салат зимний</string>
+    <string name="third_apple">Салат с яблоком и редисом</string>
+    <string name="third_spring">Весенний салат</string>
+    <string name="four_new_year">Новогодний латте</string>
+    <string name="four_tea">Чай с облепихой, имбирем и розмарином</string>
+    <string name="four_coconut">Кокосово-ягодный и кокосовый кисели</string>
+    <string name="four_milk">Топленное молоко</string>
 </resources>

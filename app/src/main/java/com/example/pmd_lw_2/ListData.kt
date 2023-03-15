@@ -1,6 +1,14 @@
 package com.example.pmd_lw_2
 
-class ListData(private var _description: String?, private var _imageID: Int) {
+class ListData(private var _slug: String?, private var _description: String?, private var _imageID: Int) {
+    fun getSlug(): String? {
+        return _slug
+    }
+
+    fun setSlug(_slug: String?) {
+        this._slug = _slug
+    }
+
     fun getDescription(): String? {
         return _description
     }

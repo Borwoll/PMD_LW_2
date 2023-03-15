@@ -1,12 +1,12 @@
 package com.example.pmd_lw_2
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 
 
@@ -24,11 +24,9 @@ class ListAdapter(private var _listData: Array<ListData>) :
         holder.textView.setText(_listData[position].getDescription())
         holder.imageView.setImageResource(_listData[position].getImageId())
         holder.relativeLayout.setOnClickListener { view ->
-            Toast.makeText(
-                view.context,
-                "нажмите на элемент: " + myListData.getDescription(),
-                Toast.LENGTH_LONG
-            ).show()
+            val intent = Intent(view.context, RecipesActivity::class.java)
+            intent.putExtra("slug", myListData.getSlug())
+            view.context.startActivity(intent)
         }
     }
 
