@@ -26,9 +26,9 @@ After executing the command, open the project in android studio. After the gradl
 
 ## Screenshots of the application
 <p align="center">
-  <img src="">
-  <img src="">
-  <img src="">
+  <img src="https://i.imgur.com/pPbAPzK.png">
+  <img src="https://i.imgur.com/OY9Q4lI.png">
+  <img src="https://i.imgur.com/5Do41x4.png">
 </p>
 
 ## License

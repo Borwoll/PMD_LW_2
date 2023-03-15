@@ -12,13 +12,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val myListData: Array<ListData> = arrayOf<ListData>(
-            ListData("first", getString(R.string.first_category), R.mipmap.catalog_1_foreground),
-            ListData("second",getString(R.string.second_category), R.mipmap.catalog_2_foreground),
-            ListData("salad", getString(R.string.third_category), R.mipmap.catalog_6_foreground),
-            ListData("drinks", getString(R.string.four_category), R.mipmap.catalog_9_foreground)
+            ListData(getString(R.string.first_slug), getString(R.string.first_category), R.mipmap.catalog_1_foreground),
+            ListData(getString(R.string.second_slug),getString(R.string.second_category), R.mipmap.catalog_2_foreground),
+            ListData(getString(R.string.third_slug), getString(R.string.third_category), R.mipmap.catalog_6_foreground),
+            ListData(getString(R.string.four_slug), getString(R.string.four_category), R.mipmap.catalog_9_foreground)
         )
         val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
-        val adapter = ListAdapter(myListData)
+        val adapter = ListAdapter(myListData, R.layout.list_item)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter

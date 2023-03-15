@@ -27,6 +27,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ContentRecipeActivity"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="package.ContentRecipeActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
