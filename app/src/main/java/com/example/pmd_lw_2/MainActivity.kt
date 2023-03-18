@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +17,9 @@ class MainActivity : AppCompatActivity() {
             ListData(getString(R.string.four_slug), getString(R.string.four_category), R.mipmap.catalog_9_foreground)
         )
         val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
-        val adapter = ListAdapter(myListData, R.layout.list_item)
+        val factory = ItemClickListFactory()
+        val itemClickList = factory.makeItemClickList(ItemType.Recipes)
+        val adapter = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter

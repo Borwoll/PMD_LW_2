@@ -29,10 +29,18 @@ class ContentRecipeActivity : AppCompatActivity() {
             "four_coconut" to arrayOf<ListData>(ListData(getString(R.string.four_coconut), getString(R.string.four_coconut), R.mipmap.four_coconut_foreground, getString(R.string.four_coconut_content))),
             "four_milk" to arrayOf<ListData>(ListData(getString(R.string.four_milk), getString(R.string.four_milk), R.mipmap.four_milk_foreground, getString(R.string.four_milk_content))))
 
-        var adapter = myListData[intent.getStringExtra("slug")]?.let { ListAdapter(it, R.layout.content_recipe_item) }
+        val factory = ItemClickListFactory()
+        val itemClickList = factory.makeItemClickList(ItemType.ContentRecipe)
         val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        recyclerView.adapter = itemClickList?.let {
+            myListData[intent.getStringExtra("slug")]?.let { it1 ->
+                ListAdapter(
+                    it1, R.layout.content_recipe_item,
+                    it
+                )
+            }
+        }
     }
 }

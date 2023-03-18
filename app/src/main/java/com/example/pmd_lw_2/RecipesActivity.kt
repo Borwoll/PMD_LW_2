@@ -39,25 +39,17 @@ class RecipesActivity : AppCompatActivity() {
             ListData(getString(R.string.four_milk_slug), getString(R.string.four_milk), R.mipmap.four_milk_foreground)
         )
 
+         val myListData: Map<String, Array<ListData>> = mapOf(
+            getString(R.string.first_slug) to myListData1,
+            getString(R.string.second_slug) to myListData2,
+            getString(R.string.third_slug) to myListData3,
+            getString(R.string.four_slug) to myListData4
+        )
+
         val slug = intent.getStringExtra("slug")
-        var adapter = ListAdapter(myListData1, R.layout.list_item)
-        when (slug) {
-            getString(R.string.first_slug) -> {
-                adapter = ListAdapter(myListData1, R.layout.list_item)
-            }
-            getString(R.string.second_slug) -> {
-                adapter = ListAdapter(myListData2, R.layout.list_item)
-            }
-            getString(R.string.third_slug) -> {
-                adapter = ListAdapter(myListData3, R.layout.list_item)
-            }
-            getString(R.string.four_slug) -> {
-                adapter = ListAdapter(myListData4, R.layout.list_item)
-            }
-            else -> {
-                exitProcess(0);
-            }
-        }
+        val factory = ItemClickListFactory()
+        val itemClickList = factory.makeItemClickList(ItemType.ContentRecipe)
+        val adapter = itemClickList?.let { myListData[slug]?.let { it1 -> ListAdapter(it1, R.layout.list_item, it) } }
 
         val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
         recyclerView.setHasFixedSize(true)

@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 
-class ListAdapter(private var _listData: Array<ListData>, private var list_item: Int) :
+class ListAdapter(private var _listData: Array<ListData>, private var list_item: Int, private var itemClickList: CategoryItemClickList) :
     RecyclerView.Adapter<ListAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,12 +27,8 @@ class ListAdapter(private var _listData: Array<ListData>, private var list_item:
         holder.imageView.setImageResource(_listData[position].getImageId())
         holder.relativeLayout.setOnClickListener { view ->
             val slug = myListData.getSlug()
-            var intent = Intent(view.context, RecipesActivity::class.java)
-            if (slug != null) if (slug.substringAfterLast('_') != "category") {
-                intent = Intent(view.context, ContentRecipeActivity::class.java)
-            }
-            intent.putExtra("slug", myListData.getSlug())
-            view.context.startActivity(intent)
+            if (slug != null)
+                itemClickList.onCategoryClick(slug, view)
         }
     }
 
