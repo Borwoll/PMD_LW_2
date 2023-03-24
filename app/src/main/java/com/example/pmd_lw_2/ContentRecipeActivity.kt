@@ -16,6 +16,22 @@ class ContentRecipeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         var myListData: Array<ListData> = arrayOf<ListData>()
+        val factory = ItemClickListFactory()
+        val itemClickList = factory.makeItemClickList(ItemType.ContentRecipe)
+        val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = itemClickList?.let { ListAdapter(myListData, R.layout.content_recipe_item, it) }
+        Thread(Runnable {
+            Thread.sleep(1000)
+            runOnUiThread {
+                getNewDataSet(recyclerView, itemClickList)
+            }
+        }).start()
+    }
+
+    private fun getNewDataSet(recyclerView: RecyclerView, itemClickList: CategoryItemClickList?) {
+        var myListData: Array<ListData> = arrayOf<ListData>()
         val slug = intent.getStringExtra("slug")
         try {
             val url = URL("https://www.themealdb.com/api/json/v1/1/lookup.php?i=$slug")
@@ -32,12 +48,7 @@ class ContentRecipeActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        val factory = ItemClickListFactory()
-        val itemClickList = factory.makeItemClickList(ItemType.ContentRecipe)
-        val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = itemClickList?.let { ListAdapter(myListData, R.layout.content_recipe_item, it) }
+        val adapterNewDataSet = itemClickList?.let { ListAdapter(myListData, R.layout.content_recipe_item, it) }
+        recyclerView.swapAdapter(adapterNewDataSet, true);
     }
 }

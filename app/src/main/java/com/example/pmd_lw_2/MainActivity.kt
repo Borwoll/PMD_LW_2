@@ -1,5 +1,6 @@
 package com.example.pmd_lw_2
 
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.StrictMode
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.json.*
 import java.io.InputStream
 import java.net.URL
+import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +24,24 @@ class MainActivity : AppCompatActivity() {
         StrictMode.setThreadPolicy(policy)
 
         var myListData: Array<ListData> = arrayOf<ListData>()
+        val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
+        val factory = ItemClickListFactory()
+        val itemClickList = factory.makeItemClickList(ItemType.Recipes)
+        val adapter = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
+        Thread(Runnable {
+            Thread.sleep(1000)
+            runOnUiThread {
+                getNewDataSet(recyclerView, itemClickList)
+            }
+        }).start()
+    }
+
+    private fun getNewDataSet(recyclerView: RecyclerView, itemClickList: CategoryItemClickList?) {
+        var myListData: Array<ListData> = arrayOf<ListData>()
         try {
             val url = URL("https://www.themealdb.com/api/json/v1/1/categories.php")
             val categoriesObject = JSONTokener(url.readText()).nextValue() as JSONObject
@@ -37,13 +56,7 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
-        val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
-        val factory = ItemClickListFactory()
-        val itemClickList = factory.makeItemClickList(ItemType.Recipes)
-        val adapter = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }
-        recyclerView.setHasFixedSize(true)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        val adapterNewDataSet = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }
+        recyclerView.swapAdapter(adapterNewDataSet, true);
     }
 }
