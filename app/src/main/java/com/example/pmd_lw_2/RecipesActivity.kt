@@ -1,56 +1,40 @@
 package com.example.pmd_lw_2
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.system.exitProcess
+import org.json.JSONObject
+import org.json.JSONTokener
+import java.io.InputStream
+import java.net.URL
 
 class RecipesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val myListData1: Array<ListData> = arrayOf<ListData>(
-            ListData(getString(R.string.first_bean_soup_slug), getString(R.string.first_bean_soup), R.mipmap.first_bean_soup_foreground),
-            ListData(getString(R.string.first_pumpkin_soup_slug), getString(R.string.first_pumpkin_soup), R.mipmap.first_pumpkin_soup_foreground),
-            ListData(getString(R.string.first_tomato_soup_slug), getString(R.string.first_tomato_soup), R.mipmap.first_tomato_soup_foreground),
-            ListData(getString(R.string.first_cabbage_soup_slug), getString(R.string.first_cabbage_soup), R.mipmap.first_cabbage_soup_foreground)
-        )
+        var myListData: Array<ListData> = arrayOf<ListData>()
+        val description = intent.getStringExtra("description")
+        try {
+            val url = URL("https://www.themealdb.com/api/json/v1/1/filter.php?c=$description")
+            val mealsObject = JSONTokener(url.readText()).nextValue() as JSONObject
+            val mealsArray = mealsObject.getJSONArray("meals")
+            for (i in 0 until mealsArray.length()) {
+                val strMeal = mealsArray.getJSONObject(i).getString("strMeal")
+                val strMealThumb = mealsArray.getJSONObject(i).getString("strMealThumb")
+                val idMeal = mealsArray.getJSONObject(i).getString("idMeal")
+                val bitmap = BitmapFactory.decodeStream(URL(strMealThumb).content as InputStream)
+                myListData += ListData(idMeal, strMeal, bitmap)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
-        val myListData2: Array<ListData> = arrayOf<ListData>(
-            ListData(getString(R.string.second_potato_boats_slug), getString(R.string.second_potato_boats), R.mipmap.second_potato_boats_foreground),
-            ListData(getString(R.string.second_meatballs_slug), getString(R.string.second_meatballs), R.mipmap.second_meatballs_foreground),
-            ListData(getString(R.string.second_vegetables_slug), getString(R.string.second_vegetables), R.mipmap.second_vegetables_foreground),
-            ListData(getString(R.string.second_porridge_slug), getString(R.string.second_porridge), R.mipmap.second_porridge_foreground)
-        )
-
-        val myListData3: Array<ListData> = arrayOf<ListData>(
-            ListData(getString(R.string.third_avocado_slug), getString(R.string.third_avocado), R.mipmap.third_avocado_foreground),
-            ListData(getString(R.string.thid_winter_slug), getString(R.string.thid_winter), R.mipmap.thid_winter_foreground),
-            ListData(getString(R.string.third_apple_slug), getString(R.string.third_apple), R.mipmap.third_apple_foreground),
-            ListData(getString(R.string.third_spring_slug),getString(R.string.third_spring), R.mipmap.third_spring_foreground)
-        )
-
-        val myListData4: Array<ListData> = arrayOf<ListData>(
-            ListData(getString(R.string.four_new_year_slug), getString(R.string.four_new_year), R.mipmap.four_new_year_foreground),
-            ListData(getString(R.string.four_tea_slug), getString(R.string.four_tea), R.mipmap.four_tea_foreground),
-            ListData(getString(R.string.four_coconut_slug), getString(R.string.four_coconut), R.mipmap.four_coconut_foreground),
-            ListData(getString(R.string.four_milk_slug), getString(R.string.four_milk), R.mipmap.four_milk_foreground)
-        )
-
-         val myListData: Map<String, Array<ListData>> = mapOf(
-            getString(R.string.first_slug) to myListData1,
-            getString(R.string.second_slug) to myListData2,
-            getString(R.string.third_slug) to myListData3,
-            getString(R.string.four_slug) to myListData4
-        )
-
-        val slug = intent.getStringExtra("slug")
         val factory = ItemClickListFactory()
         val itemClickList = factory.makeItemClickList(ItemType.ContentRecipe)
-        val adapter = itemClickList?.let { myListData[slug]?.let { it1 -> ListAdapter(it1, R.layout.list_item, it) } }
-
+        val adapter = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }
         val recyclerView = findViewById<View>(R.id.recyclerView) as RecyclerView
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)

@@ -24,11 +24,13 @@ class ListAdapter(private var _listData: Array<ListData>, private var list_item:
         val myListData: ListData = _listData[position]
         holder.textView.text = _listData[position].getDescription()
         holder.textViewContent.text = _listData[position].getContent()
-        holder.imageView.setImageResource(_listData[position].getImageId())
+        holder.imageView.setImageBitmap(_listData[position].getImageBitmap())
         holder.relativeLayout.setOnClickListener { view ->
             val slug = myListData.getSlug()
-            if (slug != null)
-                itemClickList.onCategoryClick(slug, view)
+            val description = myListData.getDescription()
+            if (slug != null && description != null) {
+                itemClickList.onCategoryClick(slug, description, view)
+            }
         }
     }
 

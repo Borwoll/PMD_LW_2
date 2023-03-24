@@ -1,11 +1,11 @@
 <h1 align="center">
   <br>
   <br>
-  Laboratory work №2
+  Laboratory work №2-3
   <br>
 </h1>
 
-<h4 align="center">The second laboratory work on the discipline programming of mobile devices.</h4>
+<h4 align="center">The second and third laboratory work on the discipline of programming mobile devices.</h4>
 
 <p align="center">
   <a href="#how-to-use">How To Use</a> •
@@ -26,9 +26,9 @@ After executing the command, open the project in android studio. After the gradl
 
 ## Screenshots of the application
 <p align="center">
-  <img src="https://i.imgur.com/pPbAPzK.png">
-  <img src="https://i.imgur.com/OY9Q4lI.png">
-  <img src="https://i.imgur.com/5Do41x4.png">
+  <img src="https://i.imgur.com/mexKhev.png">
+  <img src="https://i.imgur.com/UEjbRkj.png">
+  <img src="https://i.imgur.com/FqxDxJV.png">
 </p>
 
 ## License

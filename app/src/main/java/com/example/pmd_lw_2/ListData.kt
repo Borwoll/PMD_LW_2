@@ -1,6 +1,8 @@
 package com.example.pmd_lw_2
 
-class ListData(private var _slug: String?, private var _description: String?, private var _imageID: Int, private var _content: String? = null) {
+import android.graphics.Bitmap
+
+class ListData(private var _slug: String?, private var _description: String?, private var _imageBitmap: Bitmap, private var _content: String? = null) {
     fun getSlug(): String? {
         return _slug
     }
@@ -17,12 +19,12 @@ class ListData(private var _slug: String?, private var _description: String?, pr
         this._description = _description
     }
 
-    fun getImageId(): Int {
-        return _imageID
+    fun getImageBitmap(): Bitmap {
+        return _imageBitmap
     }
 
-    fun setImageId(_imageID: Int) {
-        this._imageID = _imageID
+    fun setImageBitmap(_imageID: Bitmap) {
+        this._imageBitmap = _imageID
     }
 
     fun getContent(): String? {
