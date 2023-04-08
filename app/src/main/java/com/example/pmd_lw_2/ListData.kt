@@ -2,7 +2,7 @@ package com.example.pmd_lw_2
 
 import android.graphics.Bitmap
 
-class ListData(private var _slug: String?, private var _description: String?, private var _imageBitmap: Bitmap, private var _content: String? = null) {
+class ListData(private var _slug: String?, private var _description: String?, private var _imageURL: String, private var _content: String? = null) {
     fun getSlug(): String? {
         return _slug
     }
@@ -19,12 +19,12 @@ class ListData(private var _slug: String?, private var _description: String?, pr
         this._description = _description
     }
 
-    fun getImageBitmap(): Bitmap {
-        return _imageBitmap
+    fun getImageURL(): String {
+        return _imageURL
     }
 
-    fun setImageBitmap(_imageID: Bitmap) {
-        this._imageBitmap = _imageID
+    fun setImageURL(imageURL: String) {
+        this._imageURL = imageURL
     }
 
     fun getContent(): String? {

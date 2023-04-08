@@ -25,31 +25,24 @@ class RecipesActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         Thread(Runnable {
-            Thread.sleep(1000)
+            val description = intent.getStringExtra("description")
+            try {
+                val url = URL("https://www.themealdb.com/api/json/v1/1/filter.php?c=$description")
+                val mealsObject = JSONTokener(url.readText()).nextValue() as JSONObject
+                val mealsArray = mealsObject.getJSONArray("meals")
+                for (i in 0 until mealsArray.length()) {
+                    val strMeal = mealsArray.getJSONObject(i).getString("strMeal")
+                    val strMealThumb = mealsArray.getJSONObject(i).getString("strMealThumb")
+                    val idMeal = mealsArray.getJSONObject(i).getString("idMeal")
+                    myListData += ListData(idMeal, strMeal, strMealThumb)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             runOnUiThread {
-                getNewDataSet(recyclerView, itemClickList)
+                val adapterNewDataSet = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }
+                recyclerView.swapAdapter(adapterNewDataSet, true);
             }
         }).start()
-    }
-
-    private fun getNewDataSet(recyclerView: RecyclerView, itemClickList: CategoryItemClickList?) {
-        var myListData: Array<ListData> = arrayOf<ListData>()
-        val description = intent.getStringExtra("description")
-        try {
-            val url = URL("https://www.themealdb.com/api/json/v1/1/filter.php?c=$description")
-            val mealsObject = JSONTokener(url.readText()).nextValue() as JSONObject
-            val mealsArray = mealsObject.getJSONArray("meals")
-            for (i in 0 until mealsArray.length()) {
-                val strMeal = mealsArray.getJSONObject(i).getString("strMeal")
-                val strMealThumb = mealsArray.getJSONObject(i).getString("strMealThumb")
-                val idMeal = mealsArray.getJSONObject(i).getString("idMeal")
-                val bitmap = BitmapFactory.decodeStream(URL(strMealThumb).content as InputStream)
-                myListData += ListData(idMeal, strMeal, bitmap)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        val adapterNewDataSet = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }
-        recyclerView.swapAdapter(adapterNewDataSet, true);
     }
 }

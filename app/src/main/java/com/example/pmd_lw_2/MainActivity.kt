@@ -1,7 +1,7 @@
 package com.example.pmd_lw_2
 
-import android.content.Intent
 import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import org.json.*
 import java.io.InputStream
 import java.net.URL
-import kotlin.concurrent.thread
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,30 +32,23 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         Thread(Runnable {
-            Thread.sleep(1000)
+            try {
+                val url = URL("https://www.themealdb.com/api/json/v1/1/categories.php")
+                val categoriesObject = JSONTokener(url.readText()).nextValue() as JSONObject
+                val categoriesArray = categoriesObject.getJSONArray("categories")
+                for (i in 0 until categoriesArray.length()) {
+                    val idCategory = categoriesArray.getJSONObject(i).getString("idCategory")
+                    val strCategory = categoriesArray.getJSONObject(i).getString("strCategory")
+                    val strCategoryThumb = categoriesArray.getJSONObject(i).getString("strCategoryThumb")
+                    myListData += ListData(idCategory, strCategory, strCategoryThumb)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
             runOnUiThread {
-                getNewDataSet(recyclerView, itemClickList)
+                val adapterNewDataSet = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }
+                recyclerView.swapAdapter(adapterNewDataSet, true);
             }
         }).start()
-    }
-
-    private fun getNewDataSet(recyclerView: RecyclerView, itemClickList: CategoryItemClickList?) {
-        var myListData: Array<ListData> = arrayOf<ListData>()
-        try {
-            val url = URL("https://www.themealdb.com/api/json/v1/1/categories.php")
-            val categoriesObject = JSONTokener(url.readText()).nextValue() as JSONObject
-            val categoriesArray = categoriesObject.getJSONArray("categories")
-            for (i in 0 until categoriesArray.length()) {
-                val idCategory = categoriesArray.getJSONObject(i).getString("idCategory")
-                val strCategory = categoriesArray.getJSONObject(i).getString("strCategory")
-                val strCategoryThumb = categoriesArray.getJSONObject(i).getString("strCategoryThumb")
-                val bitmap = BitmapFactory.decodeStream(URL(strCategoryThumb).content as InputStream)
-                myListData += ListData(idCategory, strCategory, bitmap)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        val adapterNewDataSet = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }
-        recyclerView.swapAdapter(adapterNewDataSet, true);
     }
 }

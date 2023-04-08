@@ -1,6 +1,7 @@
 package com.example.pmd_lw_2
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import java.io.InputStream
+import java.net.URL
 
 
 class ListAdapter(private var _listData: Array<ListData>, private var list_item: Int, private var itemClickList: CategoryItemClickList) :
@@ -24,7 +27,7 @@ class ListAdapter(private var _listData: Array<ListData>, private var list_item:
         val myListData: ListData = _listData[position]
         holder.textView.text = _listData[position].getDescription()
         holder.textViewContent.text = _listData[position].getContent()
-        holder.imageView.setImageBitmap(_listData[position].getImageBitmap())
+        holder.imageView.setImageBitmap(BitmapFactory.decodeStream(URL(_listData[position].getImageURL()).content as InputStream))
         holder.relativeLayout.setOnClickListener { view ->
             val slug = myListData.getSlug()
             val description = myListData.getDescription()
