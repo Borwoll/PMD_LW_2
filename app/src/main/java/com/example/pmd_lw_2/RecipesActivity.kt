@@ -1,13 +1,16 @@
 package com.example.pmd_lw_2
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.json.JSONObject
 import org.json.JSONTokener
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.net.URL
 
@@ -24,8 +27,8 @@ class RecipesActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
+        val description = intent.getStringExtra("description")
         Thread(Runnable {
-            val description = intent.getStringExtra("description")
             try {
                 val url = URL("https://www.themealdb.com/api/json/v1/1/filter.php?c=$description")
                 val mealsObject = JSONTokener(url.readText()).nextValue() as JSONObject
@@ -37,7 +40,19 @@ class RecipesActivity : AppCompatActivity() {
                     myListData += ListData(idMeal, strMeal, strMealThumb)
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                val db = baseContext.openOrCreateDatabase("app.db", MODE_PRIVATE, null)
+                val query = db.rawQuery("SELECT * FROM recipes WHERE text=?", arrayOf(description))
+                if (query.count != 0) {
+                    while (query.moveToNext()) {
+                        val slug = query.getString(0)
+                        val text = query.getString(1)
+                        val image = query.getString(2)
+                        myListData += ListData(slug, text, image)
+                    }
+                    query.close()
+                } else
+                    e.printStackTrace()
+                db.close()
             }
             runOnUiThread {
                 val adapterNewDataSet = itemClickList?.let { ListAdapter(myListData, R.layout.list_item, it) }

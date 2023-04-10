@@ -4,6 +4,7 @@ import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.URLUtil
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import java.io.InputStream
 import java.net.URL
+import android.util.Base64
+import android.util.Base64.DEFAULT
 
 
 class ListAdapter(private var _listData: Array<ListData>, private var list_item: Int, private var itemClickList: CategoryItemClickList) :
@@ -35,11 +38,18 @@ class ListAdapter(private var _listData: Array<ListData>, private var list_item:
         }
 
         Thread {
-            val url = URL(_listData[position].getImageURL())
-            val inputStream: InputStream = url.openStream()
-            val bitmap = BitmapFactory.decodeStream(inputStream)
+            val url = _listData[position].getImageURL()
+            val bitmap = if (URLUtil.isValidUrl(url)) {
+                URLUtil.isValidUrl(url)
+                val inputStream: InputStream = URL(url).openStream()
+                BitmapFactory.decodeStream(inputStream)
+            } else {
+                val byteArray = Base64.decode(url, DEFAULT)
+                BitmapFactory.decodeByteArray(byteArray,
+                    0, byteArray.size)
+            }
 
-            (holder.imageView.getContext() as AppCompatActivity).runOnUiThread {
+            (holder.imageView.context as AppCompatActivity).runOnUiThread {
                 holder.imageView.setImageBitmap(bitmap)
             }
         }.start()
