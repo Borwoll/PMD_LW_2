@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,29 +27,31 @@ class ContentRecipeActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = itemClickList?.let { ListAdapter(myListData, R.layout.content_recipe_item, it) }
 
-        val slug = intent.getStringExtra("slug")
+        val recipeID = intent.getStringExtra("id")
         Thread(Runnable {
             try {
-                val url = URL("https://www.themealdb.com/api/json/v1/1/lookup.php?i=$slug")
+                val url = URL("https://www.themealdb.com/api/json/v1/1/lookup.php?i=$recipeID")
+                val text = url.readText()
                 val mealsObject = JSONTokener(url.readText()).nextValue() as JSONObject
                 val mealsArray = mealsObject.getJSONArray("meals")
+                Log.e("test", "test")
                 for (i in 0 until mealsArray.length()) {
+                    val idMeal = mealsArray.getJSONObject(i).getString("idMeal")
                     val strMeal = mealsArray.getJSONObject(i).getString("strMeal")
                     val strMealThumb = mealsArray.getJSONObject(i).getString("strMealThumb")
-                    val idMeal = mealsArray.getJSONObject(i).getString("idMeal")
                     val strInstructions = mealsArray.getJSONObject(i).getString("strInstructions")
                     myListData += ListData(idMeal, strMeal, strMealThumb, strInstructions)
                 }
             } catch (e: Exception) {
                 val db = baseContext.openOrCreateDatabase("app.db", MODE_PRIVATE, null)
-                val query = db.rawQuery("SELECT * FROM contentRecipe WHERE slug=?", arrayOf(slug))
+                val query = db.rawQuery("SELECT * FROM contentRecipe WHERE id=?", arrayOf(recipeID))
                 if (query.count != 0) {
                     while (query.moveToNext()) {
-                        val slug = query.getString(0)
-                        val text = query.getString(1)
-                        val content = query.getString(2)
-                        val image = query.getString(3)
-                        myListData += ListData(slug, text, image, content)
+                        val id = query.getString(0)
+                        val text = query.getString(2)
+                        val content = query.getString(3)
+                        val image = query.getString(4)
+                        myListData += ListData(id, text, image, content)
                     }
                     query.close()
                 } else

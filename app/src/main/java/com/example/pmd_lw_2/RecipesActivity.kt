@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,7 @@ class RecipesActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
+        val categoryID = intent.getStringExtra("id")
         val description = intent.getStringExtra("description")
         Thread(Runnable {
             try {
@@ -41,13 +43,13 @@ class RecipesActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 val db = baseContext.openOrCreateDatabase("app.db", MODE_PRIVATE, null)
-                val query = db.rawQuery("SELECT * FROM recipes WHERE text=?", arrayOf(description))
+                val query = db.rawQuery("SELECT * FROM recipes WHERE category_id=?", arrayOf(categoryID))
                 if (query.count != 0) {
                     while (query.moveToNext()) {
-                        val slug = query.getString(0)
-                        val text = query.getString(1)
-                        val image = query.getString(2)
-                        myListData += ListData(slug, text, image)
+                        val id = query.getString(0)
+                        val text = query.getString(2)
+                        val image = query.getString(3)
+                        myListData += ListData(id, text, image)
                     }
                     query.close()
                 } else

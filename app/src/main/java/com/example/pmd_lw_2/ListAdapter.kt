@@ -30,11 +30,9 @@ class ListAdapter(private var _listData: Array<ListData>, private var list_item:
         holder.textView.text = _listData[position].getDescription()
         holder.textViewContent.text = _listData[position].getContent()
         holder.relativeLayout.setOnClickListener { view ->
-            val slug = myListData.getSlug()
+            val id = myListData.getID()
             val description = myListData.getDescription()
-            if (slug != null && description != null) {
-                itemClickList.onCategoryClick(slug, description, view)
-            }
+            itemClickList.onCategoryClick(id, description, view)
         }
 
         Thread {
