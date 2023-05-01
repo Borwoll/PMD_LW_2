@@ -1,11 +1,11 @@
 <h1 align="center">
   <br>
   <br>
-  Laboratory work №2-3
+  Laboratory work №2-5
   <br>
 </h1>
 
-<h4 align="center">The second and third laboratory work on the discipline of programming mobile devices.</h4>
+<h4 align="center">From the second to the fifth laboratory work on the discipline programming of mobile devices.</h4>
 
 <p align="center">
   <a href="#how-to-use">How To Use</a> •
